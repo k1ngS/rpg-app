@@ -1,0 +1,17 @@
+# Java / Spring Boot
+target/
+*.log
+*.class
+*.jar
+*.war
+*.iml
+/.idea/
+/.mvn/
+/.mvnw
+/mvnw.cmd
+
+# Node / React
+node_modules/
+dist/
+build/
+*.env

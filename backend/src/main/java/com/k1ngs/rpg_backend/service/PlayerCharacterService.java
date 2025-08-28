@@ -52,7 +52,7 @@ public class PlayerCharacterService {
         return playerCharacterRepository.findByCharacterCode(characterCode);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public PlayerCharacterResponseDTO update(Long id, PlayerCharacterUpdateDTO updateDTO) {
         PlayerCharacter pc = playerCharacterRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Personagem não encontrado id=" + id));

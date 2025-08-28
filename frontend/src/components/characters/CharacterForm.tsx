@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { getClasses, getAncestries } from "@/services/enumService";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
 
 interface Props {
   initial?: any;
@@ -58,33 +59,39 @@ export default function CharacterForm({ initial, onSubmit, isEdit, saveCharacter
       <Label htmlFor="level">Nível</Label>
       <Input id="level" type="number" min={1} value={level} onChange={e => setLevel(Number(e.target.value))} required disabled={loading} />
 
-      <Label htmlFor="characterClass">Classe</Label>
-      <select
-        id="characterClass"
-        value={characterClass}
-        onChange={e => setCharacterClass(e.target.value)}
-        disabled={loading}
-        required
-      >
-        <option value="">Selecione</option>
-        {classOptions.map(opt => (
-          <option key={opt.key} value={opt.key}>{opt.label}</option>
-        ))}
-      </select>
+      <div className="flex gap-4">
+        <div className="space-y-4">
+          <Label htmlFor="characterClass">Classe</Label>
+          <Select name="characterClass" onValueChange={setCharacterClass} value={characterClass} disabled={loading} required>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select a class" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {classOptions.map(opt => (
+                  <SelectItem key={opt.key} value={opt.key}>{opt.label}</SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
 
-      <Label htmlFor="characterAncestry">Ascendência</Label>
-      <select
-        id="characterAncestry"
-        value={characterAncestry}
-        onChange={e => setCharacterAncestry(e.target.value)}
-        disabled={loading}
-        required
-      >
-        <option value="">Selecione</option>
-        {ancestryOptions.map(opt => (
-          <option key={opt.key} value={opt.key}>{opt.label}</option>
-        ))}
-      </select>
+        <div className="space-y-4">
+          <Label htmlFor="characterAncestry">Ascendência</Label>
+          <Select name="characterAncestry" onValueChange={setCharacterAncestry} value={characterAncestry} disabled={loading} required>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select a ancestry" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {ancestryOptions.map(opt => (
+                  <SelectItem key={opt.key} value={opt.key}>{opt.label}</SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
 
       <Button type="submit" disabled={loading}>
         {isEdit ? "Salvar alterações" : "Criar personagem"}

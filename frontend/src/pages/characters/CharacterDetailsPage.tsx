@@ -47,7 +47,7 @@ export default function CharacterDetailsPage() {
           {edit ? "Editar personagem" : `Detalhes: ${character.name}`}
         </h1>
         {!edit && (
-          <Button onClick={() => setEdit(true)}>
+          <Button onClick={() => setEdit(true)} className="ml-4">
             Editar
           </Button>
         )}

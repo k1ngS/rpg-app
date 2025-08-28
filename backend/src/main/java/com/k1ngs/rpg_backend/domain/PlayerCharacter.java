@@ -6,6 +6,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -44,6 +46,9 @@ public class PlayerCharacter {
     @Column
     private Integer fortune;
 
+    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<InventoryItem> inventory = new ArrayList<>();
+
     @Column(unique = true, nullable = false)
     private String characterCode;
 
@@ -58,7 +63,7 @@ public class PlayerCharacter {
     public PlayerCharacter() {}
 
     public PlayerCharacter(String name, Integer level, PlayerCharacterClass playerCharacterClass, PlayerCharacterAncestry playerCharacterAncestry,
-                           PlayerCharacterAttributes attributes, Integer defense, Integer health, Integer corruption, Integer insanity, Integer fortune) {
+                           PlayerCharacterAttributes attributes, Integer defense, Integer health, Integer corruption, Integer insanity, Integer fortune, List<InventoryItem> inventory) {
         this.name = name;
         this.level = level != null ? level : 0;
         this.playerCharacterClass = playerCharacterClass;
@@ -69,6 +74,7 @@ public class PlayerCharacter {
         this.corruption = corruption;
         this.insanity = insanity;
         this.fortune = fortune;
+        this.inventory = inventory;
     }
 
 
@@ -109,6 +115,9 @@ public class PlayerCharacter {
 
     public Integer getFortune() { return fortune; }
     public void setFortune(Integer fortune) { this.fortune = fortune; }
+
+    public List<InventoryItem> getInventory() { return inventory; }
+    public void setInventory(List<InventoryItem> inventory) { this.inventory = inventory; }
 
     public String getCharacterCode() { return characterCode; }
     public void setCharacterCode(String characterCode) { this.characterCode = characterCode; }

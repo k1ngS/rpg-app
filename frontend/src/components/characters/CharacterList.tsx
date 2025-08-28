@@ -1,59 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import { getAllCharacters, deleteCharacter } from '../../services/characterService';
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { useEffect, useState } from "react";
+import { getAllCharacters} from "@/services/characterService";
+import { useNavigate } from "react-router";
 
-interface Character {
-  id: number;
-  name: string;
-  level?: number;
-  // Adicione outros campos que existirem no seu backend
-}
+export default function CharacterList() {
+  const [characters, setCharacters] = useState<any[]>([]);
+  const navigate = useNavigate();
 
-const CharacterList: React.FC = () => {
-  const [characters, setCharacters] = useState<Character[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchCharacters = () => {
-    setLoading(true);
-    getAllCharacters()
-      .then(response => setCharacters(response.data))
-      .finally(() => setLoading(false));
-  };
+  function fetchCharacters() {
+    getAllCharacters().then(r => setCharacters(r.data));
+  }
 
   useEffect(() => {
     fetchCharacters();
   }, []);
 
-  const handleDelete = (id: number) => {
-    if (window.confirm('Tem certeza que deseja deletar este personagem?')) {
-      deleteCharacter(id)
-        .then(fetchCharacters)
-        .catch(e => alert('Erro ao deletar personagem'));
-    }
-  };
-
   return (
-    <div className="p-4">
-      <h2 className="text-lg font-bold mb-4">Seus Personagens</h2>
-      {loading && <div>Carregando...</div>}
-      {!loading && (
-        <ul className="space-y-2">
-          {characters.map(c => (
-            <li key={c.id} className="flex items-center justify-between bg-gray-800 p-2 rounded">
-              <span>
-                {c.name} {c.level && <small>(Nv. {c.level})</small>}
-              </span>
-              <button
-                className="bg-red-500 text-white px-2 py-1 rounded"
-                onClick={() => handleDelete(c.id)}
-              >
-                Remover
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+    <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+      {characters.map(c => (
+        <Card
+          key={c.id}
+          onClick={() => navigate(`/characters/${c.id}`)}
+          className="cursor-pointer hover:shadow-lg"
+        >
+          <CardContent>
+            <CardTitle>{c.name}</CardTitle>
+            <div>Nível: {c.level ?? "-"}</div>
+            <div>Classe: {c.characterClass ?? "-"}</div>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
-};
-
-export default CharacterList;
+}
